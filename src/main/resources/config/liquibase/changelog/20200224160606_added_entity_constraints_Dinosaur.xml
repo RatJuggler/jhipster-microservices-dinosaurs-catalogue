@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <!--
+        Added the constraints for entity Dinosaur.
+    -->
+    <changeSet id="20200224160606-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="epoch_it_lived_id"
+                                 baseTableName="dinosaur"
+                                 constraintName="fk_dinosaur_epoch_it_lived_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="epoch"/>
+
+        <addForeignKeyConstraint baseColumnNames="clade_id"
+                                 baseTableName="dinosaur"
+                                 constraintName="fk_dinosaur_clade_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="clade"/>
+
+    </changeSet>
+</databaseChangeLog>

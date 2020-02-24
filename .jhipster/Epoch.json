@@ -1,0 +1,64 @@
+{
+    "name": "Epoch",
+    "fields": [
+        {
+            "fieldName": "period",
+            "fieldType": "Period",
+            "fieldValues": "TRIASSIC,JURASSIC,CRETACEOUS",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "epoch",
+            "fieldType": "EpochRange",
+            "fieldValues": "EARLY_LOWER,MIDDLE,LATE_UPPER",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "fromMa",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "999"
+        },
+        {
+            "fieldName": "toMa",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min",
+                "max"
+            ],
+            "fieldValidateRulesMin": "0",
+            "fieldValidateRulesMax": "999"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "dinosaur",
+            "otherEntityRelationshipName": "epochItLived",
+            "relationshipName": "dinosaur"
+        }
+    ],
+    "changelogDate": "20200224160406",
+    "entityTableName": "epoch",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": [
+        "gateway",
+        "catalogue"
+    ]
+}
