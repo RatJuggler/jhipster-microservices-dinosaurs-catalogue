@@ -18,7 +18,7 @@ import com.rj.dinosaurs.catalogue.domain.enumeration.Diet;
  */
 @Entity
 @Table(name = "dinosaur")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @org.springframework.data.elasticsearch.annotations.Document(indexName = "dinosaur")
 public class Dinosaur implements Serializable {
 
@@ -78,15 +78,15 @@ public class Dinosaur implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("dinosaurs")
+    @JsonIgnoreProperties(value = "dinosaurs", allowSetters = true)
     private Epoch epochItLived;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("dinosaurs")
+    @JsonIgnoreProperties(value = "dinosaurs", allowSetters = true)
     private Clade clade;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -263,7 +263,7 @@ public class Dinosaur implements Serializable {
     public void setClade(Clade clade) {
         this.clade = clade;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -281,6 +281,7 @@ public class Dinosaur implements Serializable {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "Dinosaur{" +

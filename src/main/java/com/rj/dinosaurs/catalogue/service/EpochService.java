@@ -66,6 +66,7 @@ public class EpochService {
             .map(epochMapper::toDto);
     }
 
+
     /**
      * Get one epoch by id.
      *

@@ -66,6 +66,7 @@ public class DinosaurService {
             .map(dinosaurMapper::toDto);
     }
 
+
     /**
      * Get one dinosaur by id.
      *

@@ -11,5 +11,4 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface DinosaurRepository extends JpaRepository<Dinosaur, Long> {
-
 }

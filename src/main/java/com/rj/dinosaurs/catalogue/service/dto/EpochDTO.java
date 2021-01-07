@@ -2,7 +2,6 @@ package com.rj.dinosaurs.catalogue.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 import com.rj.dinosaurs.catalogue.domain.enumeration.Period;
 import com.rj.dinosaurs.catalogue.domain.enumeration.EpochRange;
 
@@ -10,7 +9,7 @@ import com.rj.dinosaurs.catalogue.domain.enumeration.EpochRange;
  * A DTO for the {@link com.rj.dinosaurs.catalogue.domain.Epoch} entity.
  */
 public class EpochDTO implements Serializable {
-
+    
     private Long id;
 
     @NotNull
@@ -29,7 +28,7 @@ public class EpochDTO implements Serializable {
     @Max(value = 999)
     private Integer toMa;
 
-
+    
     public Long getId() {
         return id;
     }
@@ -75,22 +74,19 @@ public class EpochDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof EpochDTO)) {
             return false;
         }
 
-        EpochDTO epochDTO = (EpochDTO) o;
-        if (epochDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), epochDTO.getId());
+        return id != null && id.equals(((EpochDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "EpochDTO{" +

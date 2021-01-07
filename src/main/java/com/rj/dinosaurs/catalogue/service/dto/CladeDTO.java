@@ -2,13 +2,12 @@ package com.rj.dinosaurs.catalogue.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.rj.dinosaurs.catalogue.domain.Clade} entity.
  */
 public class CladeDTO implements Serializable {
-
+    
     private Long id;
 
     @Size(max = 64)
@@ -23,7 +22,7 @@ public class CladeDTO implements Serializable {
     @Size(max = 64)
     private String description;
 
-
+    
     public Long getId() {
         return id;
     }
@@ -69,22 +68,19 @@ public class CladeDTO implements Serializable {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof CladeDTO)) {
             return false;
         }
 
-        CladeDTO cladeDTO = (CladeDTO) o;
-        if (cladeDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), cladeDTO.getId());
+        return id != null && id.equals(((CladeDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "CladeDTO{" +

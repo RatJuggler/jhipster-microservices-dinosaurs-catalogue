@@ -14,6 +14,9 @@
 # ===================================================================
 
 spring:
+  profiles:
+    # Uncomment the following line to enable tests against production database type rather than H2, using Testcontainers
+    #active: testcontainers
   application:
     name: catalogue
   datasource:
@@ -60,9 +63,6 @@ spring:
     allow-bean-definition-overriding: true
   messages:
     basename: i18n/messages
-  mvc:
-    favicon:
-      enabled: false
   task:
     execution:
       thread-name-prefix: catalogue-task-
@@ -92,7 +92,7 @@ jhipster:
     name: 'catalogueApp'
   logging:
     # To test json console appender
-    use-json-format: true # By default, logs are in Json format
+    use-json-format: false
     logstash:
       enabled: false
       host: localhost
@@ -102,7 +102,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
-        base64-secret: YTBhMTJiZjFlMDYzNDZkZDhmYTk1MjYwNzQ5ZDgwYmEwNWZiZjRlZmZjZjg4NjkyYjE4ZWUwZjM4ZWNhNjEwOTJhM2ZlYjNjMDA1MzViOWM2MWRlYzI4MDAyOWRiNGJmY2RkZWNmNmRhZTk2ODEzZGZjMmYzZjQ3NThkM2Q0YTE=
+        base64-secret: YmY0NDY0ZGFkOGRiM2E2MDEwMjkzMTg5NTU2MmY0NjE5ZGRhYzE5MmNjZjAzN2M3YjVkZjk0NDQ3ZDJkMzNhYTNkZDg4MmRiZWUyMjRiZDgxYzVlNzlmYWU5YmIzNWE4ZmY5NWJkYjQwNTY4YWQ1NjNhNGZjNmJhODljY2EzOWE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
   metrics:

@@ -141,5 +141,5 @@ public class DinosaurResource {
         Page<DinosaurDTO> page = dinosaurService.search(query, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
+        }
 }

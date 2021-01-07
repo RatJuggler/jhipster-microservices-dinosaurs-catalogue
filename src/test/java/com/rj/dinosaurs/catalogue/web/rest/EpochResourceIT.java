@@ -7,28 +7,25 @@ import com.rj.dinosaurs.catalogue.repository.search.EpochSearchRepository;
 import com.rj.dinosaurs.catalogue.service.EpochService;
 import com.rj.dinosaurs.catalogue.service.dto.EpochDTO;
 import com.rj.dinosaurs.catalogue.service.mapper.EpochMapper;
-import com.rj.dinosaurs.catalogue.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.Validator;
-
 import javax.persistence.EntityManager;
 import java.util.Collections;
 import java.util.List;
 
-import static com.rj.dinosaurs.catalogue.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
@@ -42,6 +39,9 @@ import com.rj.dinosaurs.catalogue.domain.enumeration.EpochRange;
  * Integration tests for the {@link EpochResource} REST controller.
  */
 @SpringBootTest(classes = CatalogueApp.class)
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+@WithMockUser
 public class EpochResourceIT {
 
     private static final Period DEFAULT_PERIOD = Period.TRIASSIC;
@@ -74,35 +74,12 @@ public class EpochResourceIT {
     private EpochSearchRepository mockEpochSearchRepository;
 
     @Autowired
-    private MappingJackson2HttpMessageConverter jacksonMessageConverter;
-
-    @Autowired
-    private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
-
-    @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
-    private Validator validator;
-
     private MockMvc restEpochMockMvc;
 
     private Epoch epoch;
-
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.initMocks(this);
-        final EpochResource epochResource = new EpochResource(epochService);
-        this.restEpochMockMvc = MockMvcBuilders.standaloneSetup(epochResource)
-            .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
-            .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter)
-            .setValidator(validator).build();
-    }
 
     /**
      * Create an entity for this test.
@@ -142,11 +119,10 @@ public class EpochResourceIT {
     @Transactional
     public void createEpoch() throws Exception {
         int databaseSizeBeforeCreate = epochRepository.findAll().size();
-
         // Create the Epoch
         EpochDTO epochDTO = epochMapper.toDto(epoch);
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isCreated());
 
@@ -174,7 +150,7 @@ public class EpochResourceIT {
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -197,8 +173,9 @@ public class EpochResourceIT {
         // Create the Epoch, which fails.
         EpochDTO epochDTO = epochMapper.toDto(epoch);
 
+
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -216,8 +193,9 @@ public class EpochResourceIT {
         // Create the Epoch, which fails.
         EpochDTO epochDTO = epochMapper.toDto(epoch);
 
+
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -235,8 +213,9 @@ public class EpochResourceIT {
         // Create the Epoch, which fails.
         EpochDTO epochDTO = epochMapper.toDto(epoch);
 
+
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -254,8 +233,9 @@ public class EpochResourceIT {
         // Create the Epoch, which fails.
         EpochDTO epochDTO = epochMapper.toDto(epoch);
 
+
         restEpochMockMvc.perform(post("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -296,7 +276,6 @@ public class EpochResourceIT {
             .andExpect(jsonPath("$.fromMa").value(DEFAULT_FROM_MA))
             .andExpect(jsonPath("$.toMa").value(DEFAULT_TO_MA));
     }
-
     @Test
     @Transactional
     public void getNonExistingEpoch() throws Exception {
@@ -325,7 +304,7 @@ public class EpochResourceIT {
         EpochDTO epochDTO = epochMapper.toDto(updatedEpoch);
 
         restEpochMockMvc.perform(put("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isOk());
 
@@ -352,7 +331,7 @@ public class EpochResourceIT {
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restEpochMockMvc.perform(put("/api/epoches")
-            .contentType(TestUtil.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(epochDTO)))
             .andExpect(status().isBadRequest());
 
@@ -374,7 +353,7 @@ public class EpochResourceIT {
 
         // Delete the epoch
         restEpochMockMvc.perform(delete("/api/epoches/{id}", epoch.getId())
-            .accept(TestUtil.APPLICATION_JSON))
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
@@ -388,10 +367,12 @@ public class EpochResourceIT {
     @Test
     @Transactional
     public void searchEpoch() throws Exception {
+        // Configure the mock search repository
         // Initialize the database
         epochRepository.saveAndFlush(epoch);
         when(mockEpochSearchRepository.search(queryStringQuery("id:" + epoch.getId()), PageRequest.of(0, 20)))
             .thenReturn(new PageImpl<>(Collections.singletonList(epoch), PageRequest.of(0, 1), 1));
+
         // Search the epoch
         restEpochMockMvc.perform(get("/api/_search/epoches?query=id:" + epoch.getId()))
             .andExpect(status().isOk())

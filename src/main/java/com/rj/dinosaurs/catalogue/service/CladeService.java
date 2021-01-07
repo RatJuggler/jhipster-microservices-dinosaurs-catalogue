@@ -66,6 +66,7 @@ public class CladeService {
             .map(cladeMapper::toDto);
     }
 
+
     /**
      * Get one clade by id.
      *
